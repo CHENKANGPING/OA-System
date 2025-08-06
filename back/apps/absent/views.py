@@ -39,6 +39,15 @@ class AbsentViewSet(mixins.CreateModelMixin,
         else:
             result = queryset.filter(responder=request.user)
 
+        # result：代表符合要求的数据
+        # paginate_queryset：会做分页的逻辑处理
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+
+            # get_paginated_response：除了返回序列化后的数据外，还会返回总数据多少，上一页url是什么
+            return self.get_paginated_response(serializer.data)
+
         serializer = self.serializer_class(result, many=True)
         return Response(data=serializer.data)
 
