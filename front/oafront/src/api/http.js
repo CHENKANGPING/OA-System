@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '@/stores/auth';
+import {useAuthStore} from '@/stores/auth';
 
 class Http {
     constructor() {
@@ -10,7 +10,7 @@ class Http {
         this.instance.interceptors.request.use((config) => {
             const authStore = useAuthStore();
             const token = authStore.token;
-            if(token){
+            if (token) {
                 config.headers['Authorization'] = 'JWT ' + token;
             }
             return config;
@@ -32,14 +32,22 @@ class Http {
                 // 如果走到下面代码，说明上面await函数没有抛出异常，就肯定说明返回的状态码是200
                 resolve(result.data);
             } catch (err) {
-                let detial = err.response.data.detail;
-                reject(detial)
+                let detail = err.response.data.detail;
+                reject(detail)
             }
         })
     }
-
-    get(path, params) {
-        return this.instance.get(path, { params });
+    get(path,params) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await this.instance.get(path)
+                resolve(result.data);
+            } catch (err) {
+                let detail = err.response.data.detail;
+                reject(detail)
+            }
+        })
     }
 }
+
 export default new Http();
