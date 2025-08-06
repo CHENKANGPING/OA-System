@@ -15,7 +15,7 @@ let props = defineProps({
 <template>
   <el-page-header title="返回" @back="goBack">
     <template #content>
-      <span class="text-large font-600 mr-3">{{props.content}}</span>
+      <span class="text-large font-600 mr-3">{{ props.content }}</span>
     </template>
   </el-page-header>
 </template>
