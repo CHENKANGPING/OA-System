@@ -6,7 +6,7 @@ const TOKEN_KEY = "OA_TOKEN_KEY";
 
 export const useAuthStore = defineStore('auth', () => {
     let _user = ref({});
-    let _token = ref({});
+    let _token = ref(''); // 修改：初始化为空字符串而不是空对象
 
     function setUerToken(user, token) {
         // 保存到对象上(内存中)
@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function clearUerToken(){
         _user.value = {};
-        _token.value = '';
+        _token.value = ''; // 修改：清空为空字符串
         localStorage.removeItem(USER_KEY);
         localStorage.removeItem(TOKEN_KEY);
     }
@@ -36,10 +36,11 @@ export const useAuthStore = defineStore('auth', () => {
         }
         return _user.value;
     });
+    
     // 计算属性
     let token = computed(() => {
-        // 如果_token是一个空对象，那么就视图从localStorge中获取
-        if (!_token.value) {
+        // 修改：正确判断空字符串
+        if (!_token.value || _token.value === '') {
             let token_str = localStorage.getItem(TOKEN_KEY);
            if(token_str){
             _token.value = token_str;
