@@ -6,15 +6,10 @@ from django.contrib.auth import get_user_model
 from jwt.exceptions import ExpiredSignatureError
 MTUser = get_user_model()
 import time
-from .models import OAUser
 
 def generate_jwt(user):
     expire_time = int(time.time() + 60*60*24*7)
     return jwt.encode({"userid":user.pk,"exp":expire_time},key=settings.SECRET_KEY)
-
-class UserTokenAuthmentication(BaseAuthentication):
-    def authenticate(self, request):
-        return request._request.user,request._request.auth
 
 class JWTAuthentication(BaseAuthentication):
     """
@@ -42,7 +37,7 @@ class JWTAuthentication(BaseAuthentication):
             jwt_info = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms="HS256")
             userid = jwt_info.get('userid')
             try:
-                user = OAUser.objects.get(pk=userid)
+                user = MTUser.objects.get(pk=userid)  # 修改：使用MTUser而不是User
                 return (user, jwt_token)
             except Exception:
                 msg = '用户不存在！'
