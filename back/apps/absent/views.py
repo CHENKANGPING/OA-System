@@ -35,19 +35,18 @@ class AbsentViewSet(mixins.CreateModelMixin,
         queryset = self.get_queryset()
         who = request.query_params.get('who')
         if who and who == 'sub':
+            # 下属考勤：查询当前用户作为审批人的申请
             result = queryset.filter(responder=request.user)
         else:
-            result = queryset.filter(responder=request.user)
-
-        # result：代表符合要求的数据
-        # paginate_queryset：会做分页的逻辑处理
-        page = self.paginate_queryset(queryset)
+            # 个人考勤：查询当前用户作为申请人的申请
+            result = queryset.filter(requester=request.user)
+    
+        # 使用过滤后的result进行分页
+        page = self.paginate_queryset(result)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-
-            # get_paginated_response：除了返回序列化后的数据外，还会返回总数据多少，上一页url是什么
             return self.get_paginated_response(serializer.data)
-
+    
         serializer = self.serializer_class(result, many=True)
         return Response(data=serializer.data)
 
