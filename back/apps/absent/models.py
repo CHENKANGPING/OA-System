@@ -18,7 +18,7 @@ class AbsentType(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     
     
-class Absent(models.Model):  # 修正拼写错误
+class Absent(models.Model):
     # 1. 标题
     title = models.CharField(max_length = 200)
     # 2. 请假详细内容
@@ -41,3 +41,5 @@ class Absent(models.Model):  # 修正拼写错误
     responder_content = models.TextField(blank=True)
     
     
+    class Meta:
+        ordering = ['-create_time',]
