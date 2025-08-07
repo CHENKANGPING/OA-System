@@ -1,6 +1,6 @@
 <script name="OAPageHeader" setup>
 import router from "@/router/index.js";
-import {defineProps} from "vue";
+// 移除了 defineProps 的导入
 
 const goBack = () => {
   router.go(-1)
