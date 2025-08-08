@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
     # 安装项目的app
     'apps.oaauth',
-    'apps.absent'
+    'apps.absent',
+    'apps.inform',
+    'apps.staff'
 ]
 
 MIDDLEWARE = [
