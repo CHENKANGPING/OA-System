@@ -43,18 +43,18 @@ const onShowDialog = (index) => {
   handelIndex = index
 }
 
-const onSubmitAbsent = () =>{
-  absentFromRef.value.validate(async(valid,fields) =>{
-    if(valid){
-      try{
+const onSubmitAbsent = () => {
+  absentFromRef.value.validate(async (valid, fields) => {
+    if (valid) {
+      try {
         dialogVisible.value = false
         const absent = absents.value[handelIndex]
         const data = await absentHttp.handelSubAbsent(absent.id, absentFrom.status, absentFrom.response_content)
         // console.log(data);
-        absents.value.splice(handelIndex,1,data)
+        absents.value.splice(handelIndex, 1, data)
         ElMessage.success('下属考勤处理成功！')
-        
-      }catch(detail){
+
+      } catch (detail) {
         ElMessage.error(detail)
       }
     }
@@ -82,6 +82,11 @@ const onSubmitAbsent = () =>{
     <el-card>
       <el-table :data="absents" style="width: 100%">
         <el-table-column label="标题" prop="title"/>
+        <el-table-column label="发起者">
+          <template #default="scope">
+            {{'[' + scope.row.requester.department.name + ']' + scope.row.requester.realname }}
+          </template>
+        </el-table-column>
         <el-table-column label="类型" prop="absent_type.name"/>
         <el-table-column label="原因" prop="request_content"/>
         <el-table-column label="发起时间">
