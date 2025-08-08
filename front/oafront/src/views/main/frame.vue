@@ -125,13 +125,13 @@ const onSubmit = () => {
                         </el-icon>
                         <span>通知管理</span>
                     </template>
-                    <el-menu-item index="3-1">
+                    <el-menu-item index="3-1" :route="{name:'inform_publish'}">
                         <el-icon>
                             <BellFilled />
                         </el-icon>
                         <span>发布通知</span>
                     </el-menu-item>
-                    <el-menu-item index="3-2">
+                    <el-menu-item index="3-2" :route="{name:'inform_list'}">
                         <el-icon>
                             <Tickets />
                         </el-icon>
