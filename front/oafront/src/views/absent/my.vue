@@ -74,6 +74,7 @@ const onSubmitAbsent = () => {
         let absent = await absentHttp.applyAbsent(data)
         dialogFormVisible.value = false;
         absents.value.unshift(absent)
+        ElMessage.success('发起考勤成功！')
       } catch (detail) {
         ElMessage.error(detail)
       }
@@ -111,7 +112,7 @@ const requestAbsents = async (page) => {
     pageination.total = total
     let results = absents_data.results;
     absents.value = results
-    ElMessage.success('发起考勤成功！')
+
   } catch (detail) {
     ElMessage.error(detail)
   }
