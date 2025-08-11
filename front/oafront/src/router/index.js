@@ -20,7 +20,7 @@ const router = createRouter({
                 {path: '/absent/sub', name: 'subabsent', component: subabsent},
                 {path:'/inform/publish', name:'inform_publish',component: publish},
                 {path:'/inform/list', name:'inform_list',component: inform_list},
-                {path:'/inform/detail', name:'inform_detail',component: detail},
+                {path:'/inform/detail/:pk', name:'inform_detail',component: detail},
 
             ]
         },
