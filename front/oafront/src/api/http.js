@@ -59,6 +59,17 @@ class Http {
             }
         })
     }
+    delete(path){
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await this.instance.delete(path)
+                resolve(result);
+            } catch (err) {
+                let detail = err.response.data.detail;
+                reject(detail)
+            }
+        })
+    }
 }
 
 export default new Http();
