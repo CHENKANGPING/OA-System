@@ -17,11 +17,23 @@ const deleteInform = (pk) =>{
     return http.delete(path)
 }
 
+const getInformDetail = (pk) =>{
+    const path = "/inform/inform/" + pk
+    return http.get(path)
+}
+
+const readInform = (inform_pk) =>{
+    const path = '/inform/inform/read'
+    return http.post(path,{inform_pk})
+}
+
 
 export default {
     publishInform,
     getInformList,
-    deleteInform
+    deleteInform,
+    getInformDetail,
+    readInform
 
 }
 
