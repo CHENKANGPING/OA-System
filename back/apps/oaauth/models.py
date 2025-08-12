@@ -98,6 +98,9 @@ class OADepartment(models.Model):
     leader = models.OneToOneField(OAUser,null=True,on_delete=models.SET_NULL,related_name="leader_department",related_query_name="leader_department")
     #manager
     manager = models.ForeignKey(OAUser,null=True,on_delete=models.SET_NULL,related_name="manager_department",related_query_name="manager_department")
+    
+    class Meta:
+        ordering = ['name']  # 按部门名称排序
 
 
 
