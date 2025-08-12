@@ -61,9 +61,14 @@ onMounted(async () => {
       <el-table :data="informs" style="width: 100%">
         <el-table-column label="标题">
           <template #default="scope">
-            <router-link :to="{ name: 'inform_detail', params: { pk: scope.row.id } }">
-              {{ scope.row.title }}
-            </router-link>
+            <el-badge v-if="scope.row.reads.length == 0" is-dot class="item">
+              <router-link :to="{ name: 'inform_detail', params: { pk: scope.row.id } }">
+                {{ scope.row.title }}
+              </router-link>
+            </el-badge>
+            <router-link v-else :to="{ name: 'inform_detail', params: { pk: scope.row.id } }">
+                {{ scope.row.title }}
+              </router-link>
           </template>
         </el-table-column>
         <el-table-column label="发布者">
@@ -102,5 +107,10 @@ onMounted(async () => {
 <style scoped>
 .el-tag {
   margin-right: 4px;
+}
+.el-badge {
+  margin-right: 4px;
+  margin-top: 4px;
+
 }
 </style>
