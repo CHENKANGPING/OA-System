@@ -1,8 +1,14 @@
 from rest_framework import serializers
 
-from apps.inform.models import Inform
+from apps.inform.models import Inform, InformRead
 from apps.oaauth.models import OADepartment
 from apps.oaauth.serializers import UserSerializer, DepartmentSerializer
+
+
+class InformReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformRead
+        fields = '__all__'
 
 
 class InformSerializer(serializers.ModelSerializer):
@@ -10,6 +16,7 @@ class InformSerializer(serializers.ModelSerializer):
     departments = DepartmentSerializer(many=True, read_only=True)
     # department_ids： 是一个包含了部门的id列表
     department_ids = serializers.ListField(write_only=True)
+    reads = InformReadSerializer(many=True, read_only=True)
 
     class Meta:
         model = Inform
@@ -31,4 +38,15 @@ class InformSerializer(serializers.ModelSerializer):
             inform.departments.set(departments)
             inform.save()
         return inform
+
+
+class ReadInformSerializer(serializers.Serializer):
+    inform_pk = serializers.IntegerField(error_messages={'required': '请传入inform的id'})
+    
+    def validate_inform_pk(self, value):
+        try:
+            Inform.objects.get(pk=value)
+            return value
+        except Inform.DoesNotExist:
+            raise serializers.ValidationError("通知不存在")
 
