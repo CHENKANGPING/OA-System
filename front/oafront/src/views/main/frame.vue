@@ -145,13 +145,13 @@ const onSubmit = () => {
                         </el-icon>
                         <span>员工管理</span>
                     </template>
-                    <el-menu-item index="4-1">
+                    <el-menu-item index="4-1" :route="{name:'staff_add'}">
                         <el-icon>
                             <Plus />
                         </el-icon>
                         <span>新增员工</span>
                     </el-menu-item>
-                    <el-menu-item index="4-2">
+                    <el-menu-item index="4-2" :route="{name:'staff_list'}">
                         <el-icon>
                             <Tickets />
                         </el-icon>
