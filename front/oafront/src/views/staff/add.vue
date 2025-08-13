@@ -24,7 +24,17 @@ let rules = reactive({
 })
 
 const onSubmit = () => {
-
+    formRef.value.validate(async(valid,fields) => {
+        if(valid){
+            try{
+                await staffHttp.addStaff(staffForm.realname,staffForm.email,staffForm.password)
+                ElMessage.success('员工添加成功！')
+                router.push({name: 'staff_list'})
+            }catch(detial){
+                ElMessage.error(detial)
+            }
+        }
+    })
 }
 
 </script>
