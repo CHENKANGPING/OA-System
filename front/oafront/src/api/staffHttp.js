@@ -5,6 +5,18 @@ const getALLDepartment = () =>{
     return http.get(path)
 }
 
-export default {
+const addStaff = (realname,email,password) =>{
+    const path = "/staff/staff"
+    return http.post(path,{
+        realname,
+        email,
+        password,
+    })
+}
+
+
+
+export default {    
     getALLDepartment,
+    addStaff
 }
