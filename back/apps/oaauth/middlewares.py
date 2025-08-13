@@ -19,7 +19,7 @@ class LoginCheckMiddleware(MiddlewareMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 对于那些不需要登录就能访问的接口，可以写在这里
-        self.white_list = [reverse("oaauth:login")]  # 只保留存在的URL
+        self.white_list = [reverse("oaauth:login"), reverse("staff:active")]  # 只保留存在的URL
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         # 1. 如果返回None，那么会正常执行（包括执行视图、执行其他中间件的代码）
