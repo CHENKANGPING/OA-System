@@ -6,323 +6,77 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HiiaenOA-账号激活</title>
-
     <link href="{% static 'bootstrap5/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         html,
         body {
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .form-signin {
-            max-width: 400px;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .form-signin .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-signin .logo i {
-            font-size: 3rem;
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        .form-signin h1 {
-            text-align: center;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 2rem;
-        }
-
-        .form-floating {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-floating input {
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            padding: 1rem 1rem 1rem 3.5rem; /* 增加左内边距，确保光标在图标后面 */
-            transition: all 0.3s ease;
-            text-indent: 0; /* 确保文本不会额外缩进 */
-            height: 3.5rem; /* 设置固定高度 */
-            line-height: 1.5rem; /* 设置行高实现垂直居中 */
-            display: flex;
-            align-items: center; /* 垂直居中对齐 */
-        }
-
-        .form-floating input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-
-        .form-floating label {
-            padding-left: 3.5rem; /* 标签位置与输入框对齐 */
-            color: #6c757d;
-            top: 50%; /* 标签也垂直居中 */
-            transform: translateY(-50%);
-            transition: all 0.3s ease;
-        }
-
-        /* 当输入框获得焦点或有内容时，标签的位置调整 */
-        .form-floating input:focus ~ label,
-        .form-floating input:not(:placeholder-shown) ~ label {
-            top: 0.5rem;
-            transform: translateY(0) scale(0.85);
-            padding-left: 3.5rem;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 1.2rem; /* 图标位置 */
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            z-index: 5; /* 降低z-index，确保不会阻挡输入 */
-            pointer-events: none; /* 防止图标阻止点击和光标定位 */
-            width: 16px; /* 固定图标宽度 */
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
+            max-width: 330px;
             padding: 1rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
         }
 
-        .loading {
-            display: none;
-        }
-
-        .loading.show {
-            display: inline-block;
-        }
-
-        .alert {
-            border-radius: 12px;
-            border: none;
-            margin-top: 1rem;
-        }
-
-        .alert-success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            color: white;
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: white;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-signin {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
         }
     </style>
 </head>
 
-<body class="d-flex align-items-center justify-content-center">
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-    
-    <main class="form-signin">
-        <div class="logo">
-            <i class="fas fa-user-check"></i>
-            <h1 class="h3 fw-normal">HiiaenOA</h1>
-            <p class="text-muted">员工账号激活</p>
-        </div>
-        
+<body class="mt-5 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto">
         <form method="POST">
-            <div class="input-group form-floating">
-                <i class="fas fa-envelope input-icon"></i>
+            <h1 class="h3 mb-3 fw-normal">HiiaenOA-员工激活</h1>
+
+            <div class="form-floating">
                 <input name="email" type="email" class="form-control" id="emailInput" placeholder="请输入邮箱">
-                <label for="emailInput">邮箱地址</label>
+                <label for="emailInput">邮箱</label>
             </div>
-            
-            <div class="input-group form-floating">
-                <i class="fas fa-lock input-icon"></i>
+            <div class="form-floating">
                 <input name="password" type="password" class="form-control" id="passwordInput" placeholder="请输入密码">
-                <label for="passwordInput">设置密码</label>
+                <label for="passwordInput">密码</label>
             </div>
-            
-            <button class="btn btn-primary w-100 py-3" type="submit" id="submit-btn">
-                <span class="btn-text">激活账号</span>
-                <i class="fas fa-spinner fa-spin loading"></i>
-            </button>
+            <button class="btn btn-primary w-100 py-2" type="submit" id="submit-btn">激活</button>
         </form>
-        
-        <div id="message-container"></div>
-        
-        <div class="text-center mt-4">
-            <small class="text-muted">
-                <i class="fas fa-shield-alt"></i>
-                您的信息安全受到保护
-            </small>
-        </div>
     </main>
 
     <script>
-        $(document).ready(function() {
-            // 添加输入框焦点效果
-            $('.form-control').on('focus', function() {
-                $(this).parent().find('.input-icon').css('color', '#667eea');
-            }).on('blur', function() {
-                $(this).parent().find('.input-icon').css('color', '#6c757d');
-            });
-        });
-
         $("#submit-btn").on('click', function(event){
-            event.preventDefault();
-            
-            let email = $("#emailInput").val();
-            let password = $("#passwordInput").val();
+            event.preventDefault()
+            let email = $("#emailInput").val()
+            let password = $("#passwordInput").val()
             let emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            
-            // 清除之前的消息
-            $('#message-container').empty();
-            
-            // 验证邮箱
             if(!emailRegex.test(email)){
-                showMessage('请输入正确格式的邮箱地址！', 'danger');
+                alert("请输入正确格式的邮箱！")
                 return;
             }
-            
-            // 验证密码
             if(!password || password.length < 6){
-                showMessage('密码长度至少需要6位字符！', 'danger');
+                alert("请输入最少6位的密码！")
                 return;
             }
-            
-            // 显示加载状态
-            $(this).prop('disabled', true);
-            $('.btn-text').text('激活中...');
-            $('.loading').addClass('show');
-            
             $.post("/staff/active", {email, password}, function (result){
                 if(result.code == 200){
-                    showMessage('账号激活成功！即将跳转...', 'success');
-                    setTimeout(function() {
-                        window.location = "/";
-                    }, 2000);
-                } else {
-                    showMessage(result.message || '激活失败，请重试', 'danger');
+                    alert("激活成功！")
+                    window.location = "/"
+                }else{
+                    alert(result.message)
                 }
-            }).fail(function() {
-                showMessage('网络错误，请检查网络连接后重试', 'danger');
-            }).always(function() {
-                // 恢复按钮状态
-                $('#submit-btn').prop('disabled', false);
-                $('.btn-text').text('激活账号');
-                $('.loading').removeClass('show');
-            });
-        });
-        
-        function showMessage(message, type) {
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-            const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
-            
-            const alertHtml = `
-                <div class="alert ${alertClass} d-flex align-items-center" role="alert">
-                    <i class="${icon} me-2"></i>
-                    <div>${message}</div>
-                </div>
-            `;
-            
-            $('#message-container').html(alertHtml);
-        }
+            })
+        })
     </script>
 </body>
 
