@@ -21,6 +21,8 @@ from .serializers import AddStaffSerializer, OAUser, ActiveStaffSerializer
 from .tasks import send_email_task
 from urllib import parse
 from .paginations import StaffListPagination
+from datetime import datetime
+
 
 
 OAUser = get_user_model()
@@ -80,6 +82,11 @@ class StaffViewSet(
             return AddStaffSerializer
 
     def get_queryset(self):
+        department_id = self.request.query_params.get('department_id')
+        realname = self.request.query_params.get('realname')
+        date_joined = self.request.query_params.getlist('date_joined')
+
+
         queryset = self.queryset
         user = self.request.user
         if user.department.name != '董事会':
@@ -87,6 +94,21 @@ class StaffViewSet(
                 raise exceptions.PermissionDenied()
             else:
                 queryset = queryset.filter(department_id=user.department_id)
+        else:
+            if department_id:
+                queryset = queryset.filter(department_id=department_id)
+                
+        if realname:
+            queryset = queryset.filter(realname__contains=realname)
+            
+            
+        if date_joined:
+            try:
+                start_date = datetime.strptime(date_joined[0], '%Y-%m-%d')
+                end_date = datetime.strptime(date_joined[1], '%Y-%m-%d')
+                queryset = queryset.filter(date_joined__range = (start_date,end_date))
+            except Exception:
+                pass
         return queryset.order_by("-date_joined").all()
 
 
