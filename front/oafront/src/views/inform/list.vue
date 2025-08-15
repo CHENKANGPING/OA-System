@@ -67,8 +67,8 @@ onMounted(async () => {
               </router-link>
             </el-badge>
             <router-link v-else :to="{ name: 'inform_detail', params: { pk: scope.row.id } }">
-                {{ scope.row.title }}
-              </router-link>
+              {{ scope.row.title }}
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="发布者">
@@ -108,6 +108,7 @@ onMounted(async () => {
 .el-tag {
   margin-right: 4px;
 }
+
 .el-badge {
   margin-right: 4px;
   margin-top: 4px;
