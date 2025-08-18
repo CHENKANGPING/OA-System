@@ -25,4 +25,5 @@ urlpatterns = [
     path('inform/',include('apps.inform.urls')),
     path('staff/',include('apps.staff.urls')),
     path('image/',include('apps.image.urls')),
+    path('home/',include('apps.home.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
