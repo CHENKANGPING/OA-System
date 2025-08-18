@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
 
 
 OAUser = get_user_model()
@@ -36,3 +37,12 @@ class ActiveStaffSerializer(serializers.Serializer):
             raise serializers.ValidationError('邮箱或密码错误！')
         attrs['user'] = user
         return attrs
+    
+
+class StaffUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(
+        validators=[FileExtensionValidator(['xlsx','xls'])],
+        error_messages={'required': '请上传文件','invalid_image': '请上传正确格式的文件'}
+        
+    )
+
