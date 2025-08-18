@@ -30,9 +30,18 @@ const updateStaffStatus =(staff_id,status) =>{
     })
 }
 
+const dowoloadStaffs = (pks) =>{
+    const path = "/staff/download"
+    // 关键修改：不要手动 encodeURIComponent，也不要自己拼接 URL
+    // 直接把 JSON 字符串作为 params 传入，让 axios 负责序列化
+    return http.downloadFile(path, { pks: JSON.stringify(pks) })
+}
+
+
 export default {    
     getALLDepartment,
     addStaff,
     getStaffList,
-    updateStaffStatus
+    updateStaffStatus,
+    dowoloadStaffs
 }
