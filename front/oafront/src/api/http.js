@@ -70,6 +70,28 @@ class Http {
             }
         })
     }
+    downloadFile(path,params){
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await this.instance.get(path,{params,responseType:'blob'})
+                resolve(result.data);
+            } catch (err) {
+                // 关键增强：当响应是 blob 时，先转文本再解析 JSON，提取 detail
+                try {
+                    if (err.response && err.response.data instanceof Blob) {
+                        const text = await err.response.data.text()
+                        const data = JSON.parse(text)
+                        reject(data.detail || '下载失败')
+                    } else {
+                        let detail = err.response?.data?.detail || '下载失败'
+                        reject(detail)
+                    }
+                } catch (parseErr) {
+                    reject('下载失败')
+                }
+            }
+        })
+    }
 }
 
 export default new Http();
