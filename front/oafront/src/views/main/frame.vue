@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import authHttp from '@/api/authHttp';
 import { ElMessage } from 'element-plus';
+import routes from "@/router/frame.js";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -92,7 +93,7 @@ const onSubmit = () => {
             </router-link>
             <el-menu :router="true" default-active="1" class="el-menu-vertical-demo" background-color="#343a40" text-color="#fff"
                 :collapse="isCollapse" :collapse-transition="false">
-                <el-menu-item index="1">
+                <el-menu-item index="1" :route="{name:'home'}">
                     <el-icon>
                         <HomeFilled />
                     </el-icon>
