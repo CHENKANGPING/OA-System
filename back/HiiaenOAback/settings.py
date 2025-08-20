@@ -158,7 +158,7 @@ REST_FRAMEWORK = {
         'apps.oaauth.authentications.JWTAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 5  
 }
 
 APPEND_SLASH = False
