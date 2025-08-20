@@ -2,7 +2,7 @@ import http from './http';
 
 const publishInform = (data) =>{
     // 使用ModelViewSet的标准POST创建接口
-    const path = "/inform/"
+    const path = "/inform/inform"
     return http.post(path, data)
 }
 
