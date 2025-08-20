@@ -16,7 +16,7 @@ let pagination = reactive({
   total: 0,
 })
 
-let page_size = ref(1)
+let page_size = ref(10)  
 let dialogVisible = ref(false)
 let staffForm = reactive({
   status: 1,
@@ -236,8 +236,8 @@ const onUploadError = (error) => {
         <div style="display: flex; justify-content: space-between;">
           <el-form-item label="每页：">
             <el-select v-model="page_size" size="small" style="width: 100px;">
-              <el-option :value="1" label="10条/页"></el-option>
-              <el-option :value="2" label="20条/页"></el-option>
+              <el-option :value="10" label="10条/页"></el-option>
+              <el-option :value="20" label="20条/页"></el-option>
             </el-select>
           </el-form-item>
           <el-pagination v-model:currentPage="pagination.page" :page-size="page_size" :total="pagination.total"
