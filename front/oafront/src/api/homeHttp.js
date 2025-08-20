@@ -1,25 +1,22 @@
 import http from "@/api/http.js";
 
-const getDepartmentStaffCont = () => {
+const getDepartmentStaffCount = () => {
     const path = "/home/department/staff/count"
     return http.get(path)
 }
 
-const getLatestInform = () => {
+const getLatestInforms = () => {
     const path = "/home/latest/inform"
     return http.get(path)
 }
-
 
 const getLatestAbsents = () => {
     const path = "/home/latest/absent"
     return http.get(path)
 }
 
-
 export default {
-    getDepartmentStaffCont,
-    getLatestInform,
+    getDepartmentStaffCount,  
+    getLatestInforms,         
     getLatestAbsents
-
 }
