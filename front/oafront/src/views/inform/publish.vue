@@ -85,17 +85,31 @@ const handleCreated = (editor) => {
 
 
 const onSubmit = () => {
-  formRef.value.validate(async(valid, fields) => {
-    if (valid) {
-      console.log(informForm);
-      try{
-        let data =  await informHttp.publishInform(informForm)
-        console.log(data);
-      }catch(detail){
-        ElMessage.error(detail)
-      }
-    }
-  })
+    formRef.value.validate(async (valid, fields) => {
+        if (valid) {
+            console.log(informForm);
+            try{
+                let data = await informHttp.publishInform(informForm)
+                ElMessage.success("发布成功")
+                
+                // 清空表单数据
+                informForm.title = ''
+                informForm.content = ''
+                informForm.department_ids = []
+                
+                // 清空富文本编辑器内容
+                if (editorRef.value) {
+                    editorRef.value.clear()
+                }
+                
+                // 重置表单验证状态
+                formRef.value.resetFields()
+
+            }catch(detail){
+                ElMessage.error(detail)
+            }
+        }
+    })
 }
 
 onMounted(async () => {
