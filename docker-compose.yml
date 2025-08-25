@@ -71,6 +71,9 @@ services:
     command: >
       sh -c "python manage.py migrate --settings=HiiaenOAback.settings_docker &&
              python manage.py collectstatic --noinput --settings=HiiaenOAback.settings_docker &&
+             python manage.py initdeparments --settings=HiiaenOAback.settings_docker &&
+             python manage.py initabsenttype --settings=HiiaenOAback.settings_docker &&
+             python manage.py inituser --settings=HiiaenOAback.settings_docker &&
              python manage.py runserver 0.0.0.0:8000 --settings=HiiaenOAback.settings_docker"
 
   # Celery Worker
