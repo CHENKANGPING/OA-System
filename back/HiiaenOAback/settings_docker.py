@@ -31,6 +31,9 @@ CACHES = {
     }
 }
 
-# 静态文件配置
+# 静态文件配置 - Docker环境
 STATIC_ROOT = '/app/static'
 MEDIA_ROOT = '/app/media'
+
+# 清除STATICFILES_DIRS，避免与STATIC_ROOT冲突
+STATICFILES_DIRS = []
