@@ -328,26 +328,191 @@ npm run dev
 - 文件类型限制
 - 存储路径权限
 
-## 部署说明
+## Docker部署
 
-### 生产环境部署
+### 使用Docker Compose快速部署
 
-1. **后端部署**：
-   - 使用Gunicorn作为WSGI服务器
-   - 配置Nginx作为反向代理
-   - 使用Supervisor管理进程
+本项目提供了完整的Docker Compose配置，可以一键部署整个系统。
 
-2. **前端部署**：
-   - 执行 `npm run build` 构建生产版本
-   - 将dist目录部署到Web服务器
+#### 1. 环境要求
 
-3. **数据库**：
-   - 使用生产级MySQL配置
-   - 定期备份数据
+- Docker 20.0+
+- Docker Compose 2.0+
 
-4. **缓存**：
-   - 配置Redis集群
-   - 设置合适的缓存策略
+#### 2. 部署步骤
+
+##### 2.1 克隆项目
+
+```bash
+git clone <repository-url>
+cd OA-System
+```
+
+##### 2.2 启动服务
+
+```bash
+# 构建并启动所有服务
+docker compose up --build -d
+
+# 查看服务状态
+docker compose ps
+```
+
+##### 2.3 初始化数据
+
+等待所有服务启动完成后（约1-2分钟），执行数据初始化：
+
+```bash
+# 1. 创建部门数据
+docker compose exec backend python manage.py initdeparments
+
+# 2. 创建考勤类型数据
+docker compose exec backend python manage.py initabsenttype
+
+# 3. 创建用户数据
+docker compose exec backend python manage.py inituser
+```
+
+##### 2.4 访问系统
+
+- **前端地址**: http://localhost
+- **后端API**: http://localhost/api/
+
+#### 3. 服务架构
+
+Docker Compose包含以下服务：
+
+- **frontend**: Nginx + Vue.js前端 (端口: 80)
+- **backend**: Django后端API (内部端口: 8000)
+- **mysql**: MySQL数据库 (内部端口: 3306)
+- **redis**: Redis缓存 (内部端口: 6379)
+
+#### 4. 默认账户
+
+初始化完成后，可使用以下账户登录：
+
+| 邮箱 | 密码 | 角色 | 部门 |
+|------|------|------|------|
+| dongdong@qq.com | 111111 | 超级用户 | 董事会 |
+| duoduo@qq.com | 111111 | 超级用户 | 董事会 |
+| zhangsan@qq.com | 111111 | 普通用户 | 产品开发部 |
+| lisi@qq.com | 111111 | 普通用户 | 运营部 |
+| wangwu@qq.com | 111111 | 普通用户 | 人事部 |
+| zhaoliu@qq.com | 111111 | 普通用户 | 财务部 |
+| sunqi@qq.com | 111111 | 普通用户 | 销售部 |
+
+#### 5. 常用命令
+
+```bash
+# 查看服务日志
+docker compose logs -f [service_name]
+
+# 重启服务
+docker compose restart [service_name]
+
+# 停止所有服务
+docker compose down
+
+# 停止并删除数据卷
+docker compose down -v
+
+# 进入容器
+docker compose exec [service_name] bash
+
+# 查看数据库
+docker compose exec mysql mysql -u root -p123456 hiiaenoa
+```
+
+#### 6. 数据持久化
+
+项目配置了数据卷持久化：
+
+- **MySQL数据**: `mysql_data` 卷
+- **Redis数据**: `redis_data` 卷
+- **上传文件**: `media_data` 卷
+
+#### 7. 环境配置
+
+##### 7.1 数据库配置
+
+默认MySQL配置（可在docker-compose.yml中修改）：
+- 数据库名: `hiiaenoa`
+- 用户名: `root`
+- 密码: `123456`
+- 端口: `3306`
+
+##### 7.2 Redis配置
+
+默认Redis配置：
+- 端口: `6379`
+- 无密码认证
+
+#### 8. 故障排除
+
+##### 8.1 服务启动失败
+
+```bash
+# 查看详细日志
+docker compose logs backend
+docker compose logs mysql
+
+# 检查服务健康状态
+docker compose ps
+```
+
+##### 8.2 数据库连接失败
+
+```bash
+# 确保MySQL服务完全启动
+docker compose logs mysql
+
+# 手动重启backend服务
+docker compose restart backend
+```
+
+##### 8.3 API访问404/502错误
+
+```bash
+# 检查nginx配置
+docker compose exec frontend cat /etc/nginx/nginx.conf
+
+# 重启前端服务
+docker compose restart frontend
+```
+
+##### 8.4 重新初始化数据
+
+```bash
+# 停止服务并清除数据
+docker compose down -v
+
+# 重新启动
+docker compose up --build -d
+
+# 等待服务启动后重新初始化
+docker compose exec backend python manage.py initdeparments
+docker compose exec backend python manage.py initabsenttype
+docker compose exec backend python manage.py inituser
+```
+
+#### 9. 生产环境优化
+
+对于生产环境部署，建议进行以下优化：
+
+1. **安全配置**:
+   - 修改默认密码
+   - 配置HTTPS
+   - 设置防火墙规则
+
+2. **性能优化**:
+   - 增加资源限制
+   - 配置日志轮转
+   - 启用数据库优化
+
+3. **监控配置**:
+   - 添加健康检查
+   - 配置监控告警
+   - 设置备份策略
 
 ## 开发说明
 
