@@ -8,6 +8,8 @@ ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
 ENV PIP_TRUSTED_HOST=pypi.tuna.tsinghua.edu.cn
 
 # 安装系统依赖（Alpine使用apk）
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk add --no-cache \
     gcc \
     musl-dev \
