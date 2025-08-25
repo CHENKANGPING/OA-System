@@ -1,5 +1,8 @@
 
 
+# 删除第一行
+# version: '3.8'
+
 services:
   # MySQL数据库
   mysql:
@@ -25,7 +28,7 @@ services:
     container_name: oa_redis
     ports:
       - "6379:6379"
-      - "6380:6380"
+      # 删除这一行: - "6380:6380"
     volumes:
       - redis_data:/data
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf

@@ -27,7 +27,7 @@ CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/2'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://{REDIS_HOST}:6380/3',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/3',  # 改为6379端口
     }
 }
 
