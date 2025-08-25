@@ -45,6 +45,7 @@ services:
     container_name: oa_backend
     environment:
       - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=HiiaenOAback.settings_docker
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_NAME=hiiaenoa
@@ -64,9 +65,9 @@ services:
       - oa_network
     restart: unless-stopped
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py migrate --settings=HiiaenOAback.settings_docker &&
+             python manage.py collectstatic --noinput --settings=HiiaenOAback.settings_docker &&
+             python manage.py runserver 0.0.0.0:8000 --settings=HiiaenOAback.settings_docker"
 
   # Celery Worker
   celery:
@@ -76,6 +77,7 @@ services:
     container_name: oa_celery
     environment:
       - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=HiiaenOAback.settings_docker
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_NAME=hiiaenoa
@@ -91,7 +93,7 @@ services:
     networks:
       - oa_network
     restart: unless-stopped
-    command: celery -A HiiaenOAback worker -l info
+    command: celery -A HiiaenOAback worker -l info --settings=HiiaenOAback.settings_docker
 
   # Vue前端
   frontend:
