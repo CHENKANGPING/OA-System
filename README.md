@@ -73,7 +73,7 @@ cd OA-System
 **Linux/macOS:**
 ```bash
 # 给脚本添加执行权限
-chmod +x deploy.sh
+sudo chmod +x deploy.sh
 
 # 运行部署脚本
 ./deploy.sh
