@@ -52,137 +52,68 @@ OA-System/
 
 ## 环境要求
 
-- Python 3.8+
-- Node.js 16+
-- MySQL 5.7+
-- Redis 6.0+
+- Docker 20.0+
+- Docker Compose 2.0+
 
-## 安装与配置
+## 快速部署
 
-### 1. 克隆项目
+### 使用Docker Compose一键部署
+
+本项目提供了完整的Docker Compose配置，可以一键部署整个系统。
+
+#### 1. 克隆项目
 
 ```bash
 git clone <repository-url>
 cd OA-System
 ```
 
-### 2. 后端配置
-
-#### 2.1 创建虚拟环境
+#### 2. 启动服务
 
 ```bash
-cd back
-python -m venv venv
+# 构建并启动所有服务
+docker compose up --build -d
 
-# Windows
-venv\Scripts\activate
-
-# Linux/Mac
-source venv/bin/activate
+# 查看服务状态
+docker compose ps
 ```
 
-#### 2.2 安装依赖
+#### 3. 访问系统
 
-```bash
-pip install -r requirements.txt
-```
+等待所有服务启动完成后（约1-2分钟），系统会自动完成数据初始化：
 
-#### 2.3 数据库配置
+- **前端地址**: http://localhost
+- **后端API**: http://localhost/api/
 
-1. 创建MySQL数据库：
-```sql
-CREATE DATABASE hiiaenoa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
+### 服务架构
 
-2. 修改 `HiiaenOAback/settings.py` 中的数据库配置：
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hiiaenoa',
-        'USER': 'your_username',
-        'PASSWORD': 'your_password',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-```
+Docker Compose包含以下服务：
 
-#### 2.4 运行数据库迁移
+- **frontend**: Nginx + Vue.js前端 (端口: 80)
+- **backend**: Django后端API (内部端口: 8000)
+- **mysql**: MySQL数据库 (内部端口: 3306)
+- **redis**: Redis缓存 (内部端口: 6379)
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+### 默认账户
 
-#### 2.5 初始化数据
+初始化完成后，可使用以下账户登录：
 
-```bash
-# 初始化部门数据
-python manage.py initdeparments
-
-# 初始化请假类型
-python manage.py initabsenttype
-
-# 创建超级用户
-python manage.py inituser
-```
-
-#### 2.6 启动Redis服务
-
-```bash
-# Windows (如果安装了Redis)
-redis-server
-
-# 或使用Docker
-docker run -d -p 6379:6379 redis:alpine
-```
-
-#### 2.7 启动Celery Worker（可选）
-
-```bash
-# 新开终端窗口
-celery -A HiiaenOAback worker -l info
-```
-
-#### 2.8 启动后端服务
-
-```bash
-python manage.py runserver
-```
-
-后端服务将在 `http://127.0.0.1:8000` 启动
-
-### 3. 前端配置
-
-#### 3.1 安装依赖
-
-```bash
-cd front/oafront
-npm install
-```
-
-#### 3.2 配置环境变量
-
-检查 `.env.development` 文件，确保API地址正确：
-```
-VITE_API_BASE_URL=http://127.0.0.1:8000
-```
-
-#### 3.3 启动前端服务
-
-```bash
-npm run dev
-```
-
-前端服务将在 `http://localhost:5173` 启动
+| 邮箱 | 密码 | 角色 | 部门 |
+|------|------|------|------|
+| dongdong@qq.com | 111111 | 超级用户 | 董事会 |
+| duoduo@qq.com | 111111 | 超级用户 | 董事会 |
+| zhangsan@qq.com | 111111 | 普通用户 | 产品开发部 |
+| lisi@qq.com | 111111 | 普通用户 | 运营部 |
+| wangwu@qq.com | 111111 | 普通用户 | 人事部 |
+| zhaoliu@qq.com | 111111 | 普通用户 | 财务部 |
+| sunqi@qq.com | 111111 | 普通用户 | 销售部 |
 
 ## 使用教程
 
 ### 1. 系统登录
 
-1. 打开浏览器访问 `http://localhost:5173`
-2. 使用初始化的管理员账号登录
+1. 打开浏览器访问 `http://localhost`
+2. 使用默认账户登录（见上方默认账户表格）
 3. 首次登录需要激活账户
 
 ### 2. 用户管理
@@ -328,80 +259,7 @@ npm run dev
 - 文件类型限制
 - 存储路径权限
 
-## Docker部署
-
-### 使用Docker Compose快速部署
-
-本项目提供了完整的Docker Compose配置，可以一键部署整个系统。
-
-#### 1. 环境要求
-
-- Docker 20.0+
-- Docker Compose 2.0+
-
-#### 2. 部署步骤
-
-##### 2.1 克隆项目
-
-```bash
-git clone <repository-url>
-cd OA-System
-```
-
-##### 2.2 启动服务
-
-```bash
-# 构建并启动所有服务
-docker compose up --build -d
-
-# 查看服务状态
-docker compose ps
-```
-
-##### 2.3 初始化数据
-
-等待所有服务启动完成后（约1-2分钟），执行数据初始化：
-
-```bash
-# 1. 创建部门数据
-docker compose exec backend python manage.py initdeparments
-
-# 2. 创建考勤类型数据
-docker compose exec backend python manage.py initabsenttype
-
-# 3. 创建用户数据
-docker compose exec backend python manage.py inituser
-```
-
-##### 2.4 访问系统
-
-- **前端地址**: http://localhost
-- **后端API**: http://localhost/api/
-
-#### 3. 服务架构
-
-Docker Compose包含以下服务：
-
-- **frontend**: Nginx + Vue.js前端 (端口: 80)
-- **backend**: Django后端API (内部端口: 8000)
-- **mysql**: MySQL数据库 (内部端口: 3306)
-- **redis**: Redis缓存 (内部端口: 6379)
-
-#### 4. 默认账户
-
-初始化完成后，可使用以下账户登录：
-
-| 邮箱 | 密码 | 角色 | 部门 |
-|------|------|------|------|
-| dongdong@qq.com | 111111 | 超级用户 | 董事会 |
-| duoduo@qq.com | 111111 | 超级用户 | 董事会 |
-| zhangsan@qq.com | 111111 | 普通用户 | 产品开发部 |
-| lisi@qq.com | 111111 | 普通用户 | 运营部 |
-| wangwu@qq.com | 111111 | 普通用户 | 人事部 |
-| zhaoliu@qq.com | 111111 | 普通用户 | 财务部 |
-| sunqi@qq.com | 111111 | 普通用户 | 销售部 |
-
-#### 5. 常用命令
+## 常用Docker命令
 
 ```bash
 # 查看服务日志
@@ -423,7 +281,7 @@ docker compose exec [service_name] bash
 docker compose exec mysql mysql -u root -p123456 hiiaenoa
 ```
 
-#### 6. 数据持久化
+## 数据持久化
 
 项目配置了数据卷持久化：
 
@@ -431,9 +289,9 @@ docker compose exec mysql mysql -u root -p123456 hiiaenoa
 - **Redis数据**: `redis_data` 卷
 - **上传文件**: `media_data` 卷
 
-#### 7. 环境配置
+## 环境配置
 
-##### 7.1 数据库配置
+### 数据库配置
 
 默认MySQL配置（可在docker-compose.yml中修改）：
 - 数据库名: `hiiaenoa`
@@ -441,15 +299,15 @@ docker compose exec mysql mysql -u root -p123456 hiiaenoa
 - 密码: `123456`
 - 端口: `3306`
 
-##### 7.2 Redis配置
+### Redis配置
 
 默认Redis配置：
 - 端口: `6379`
 - 无密码认证
 
-#### 8. 故障排除
+## 故障排除
 
-##### 8.1 服务启动失败
+### 服务启动失败
 
 ```bash
 # 查看详细日志
@@ -460,7 +318,7 @@ docker compose logs mysql
 docker compose ps
 ```
 
-##### 8.2 数据库连接失败
+### 数据库连接失败
 
 ```bash
 # 确保MySQL服务完全启动
@@ -470,7 +328,7 @@ docker compose logs mysql
 docker compose restart backend
 ```
 
-##### 8.3 API访问404/502错误
+### API访问404/502错误
 
 ```bash
 # 检查nginx配置
@@ -480,22 +338,17 @@ docker compose exec frontend cat /etc/nginx/nginx.conf
 docker compose restart frontend
 ```
 
-##### 8.4 重新初始化数据
+### 重新初始化数据
 
 ```bash
 # 停止服务并清除数据
 docker compose down -v
 
-# 重新启动
+# 重新启动（系统会自动完成数据初始化）
 docker compose up --build -d
-
-# 等待服务启动后重新初始化
-docker compose exec backend python manage.py initdeparments
-docker compose exec backend python manage.py initabsenttype
-docker compose exec backend python manage.py inituser
 ```
 
-#### 9. 生产环境优化
+## 生产环境优化
 
 对于生产环境部署，建议进行以下优化：
 
