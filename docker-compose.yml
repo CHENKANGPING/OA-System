@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: oa_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 8737
+      MYSQL_DATABASE: hiiaenoa
+      MYSQL_USER: oa_user
+      MYSQL_PASSWORD: oa_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - oa_network
+    restart: unless-stopped
+
+  # Redis缓存和消息队列
+  redis:
+    image: redis:7-alpine
+    container_name: oa_redis
+    ports:
+      - "6379:6379"
+      - "6380:6380"
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - oa_network
+    restart: unless-stopped
+
+  # Django后端
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: oa_backend
+    environment:
+      - DEBUG=False
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=hiiaenoa
+      - DB_USER=root
+      - DB_PASSWORD=8737
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back/media:/app/media
+      - ./back/static:/app/static
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - oa_network
+    restart: unless-stopped
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  # Celery Worker
+  celery:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: oa_celery
+    environment:
+      - DEBUG=False
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=hiiaenoa
+      - DB_USER=root
+      - DB_PASSWORD=8737
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./back/media:/app/media
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - oa_network
+    restart: unless-stopped
+    command: celery -A HiiaenOAback worker -l info
+
+  # Vue前端
+  frontend:
+    build:
+      context: ./front/oafront
+      dockerfile: Dockerfile
+    container_name: oa_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - oa_network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  oa_network:
+    driver: bridge
