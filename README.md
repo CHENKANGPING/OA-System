@@ -57,9 +57,9 @@ OA-System/
 
 ## 快速部署
 
-### 使用Docker Compose一键部署
+### 使用一键部署脚本
 
-本项目提供了完整的Docker Compose配置，可以一键部署整个系统。
+本项目提供了自动化部署脚本，可以一键部署整个系统。
 
 #### 1. 克隆项目
 
@@ -68,7 +68,48 @@ git clone <repository-url>
 cd OA-System
 ```
 
-#### 2. 启动服务
+#### 2. 运行部署脚本
+
+**Linux/macOS:**
+```bash
+# 给脚本添加执行权限
+chmod +x deploy.sh
+
+# 运行部署脚本
+./deploy.sh
+```
+
+**Windows (Git Bash):**
+```bash
+# 运行部署脚本
+bash deploy.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+# 使用WSL或Git Bash运行
+wsl bash deploy.sh
+```
+
+#### 3. 访问系统
+
+部署脚本会自动完成以下操作：
+- 检查Docker服务状态
+- 停止现有容器并清理系统
+- 构建并启动所有服务
+- 等待MySQL和Redis启动完成
+- 执行数据库迁移
+- 收集静态文件
+- 显示服务状态
+
+等待部署完成后（约2-3分钟），系统会自动完成数据初始化：
+
+- **前端地址**: http://localhost
+- **后端API**: http://localhost/api/
+
+### 手动部署（可选）
+
+如果您需要手动控制部署过程，也可以使用以下命令：
 
 ```bash
 # 构建并启动所有服务
