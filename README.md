@@ -142,7 +142,7 @@ docker run -d -p 6379:6379 redis:alpine
 
 ```bash
 # 新开终端窗口
-celery -A HiiaenOAback worker -l info
+celery -A HiiaenOAback worker -l info -P gevent
 ```
 
 #### 2.8 启动后端服务

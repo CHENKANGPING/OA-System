@@ -87,6 +87,15 @@ onMounted(() => {
   defaultActive.value = router.currentRoute.value.name;
   displayUser.department = authStore.user.department;
   displayUser.realname = authStore.user.realname;
+  
+  // 添加调试代码
+  console.log('=== 权限调试信息 ===');
+  console.log('用户数据:', JSON.stringify(authStore.user, null, 2));
+  console.log('当前权限值:', authStore.own_permissions);
+  console.log('是否有Leader权限:', (authStore.own_permissions & 0b010) === 0b010);
+  console.log('部门leader UID:', authStore.user?.department?.leader?.uid);
+  console.log('当前用户 UID:', authStore.user?.uid);
+  console.log('权限检查结果:', authStore.has_permission([0b010], '|'));
 })
 
 </script>

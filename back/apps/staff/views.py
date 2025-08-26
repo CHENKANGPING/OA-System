@@ -92,7 +92,6 @@ class StaffViewSet(
 
     def get_serializer_class(self):
         if self.request.method in ['GET', 'PUT']:
-
             return UserSerializer
         else:
             return AddStaffSerializer
@@ -125,7 +124,7 @@ class StaffViewSet(
                 pass
         return queryset.order_by("-date_joined").all()
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):  # 改为 create 方法
         serializer = AddStaffSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             realname = serializer.validated_data['realname']

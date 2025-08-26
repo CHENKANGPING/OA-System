@@ -29,7 +29,14 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('请传入邮箱和密码！')
         return attrs
 
+class LeaderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OAUser
+        fields = ['uid', 'realname', 'email']
+
 class DepartmentSerializer(serializers.ModelSerializer):
+    leader = LeaderSerializer(read_only=True)
+    
     class Meta:
         model = OADepartment
         fields = '__all__'

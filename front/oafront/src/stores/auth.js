@@ -78,7 +78,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       // 判断是否是team leader
-      if(user.value.department.leader_id == user.value.uid){
+      if(user.value.department.leader && user.value.department.leader.uid == user.value.uid){
         _permissions |= PermissionChoices.Leader
       }
     }
